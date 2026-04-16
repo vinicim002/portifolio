@@ -2,16 +2,16 @@ package com.vinicius.backend.entities;
 
 import com.vinicius.backend.enums.ProjectCategory;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity // Indica que esta classe é uma entidade JPA, ou seja, será mapeada para uma tabela no banco de dados.
 @Table(name = "tb_project") // Define o nome da tabela no banco de dados como "tb_project".
-@Data // Gera automaticamente os métodos getters, setters, toString, equals e hashCode.
+@Setter // Gera métodos setters automaticamente.
+@Getter // Gera métodos getters automaticamente.
 @NoArgsConstructor // Gera um construtor sem argumentos.
 @AllArgsConstructor // Gera um construtor com argumentos para todos os campos da classe.
 public class Project {
@@ -24,8 +24,16 @@ public class Project {
     private String imageUrl;
     private String githubUrl;
     private String liveUrl;
-    private ProjectCategory category;
-    private String tecnologias;
+    @Enumerated(EnumType.STRING) // Define que o campo "category" será armazenado como uma string no banco de dados.
+    private ProjectCategory category; // Enum que representa as categorias do projeto, como WEB, MOBILE, DESKTOP, etc.
+
+    @ManyToMany
+    @JoinTable(
+            name = "tb_project_skill",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Skill> skills = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
@@ -36,6 +44,6 @@ public class Project {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id);
     }
 }
