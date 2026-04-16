@@ -1,6 +1,7 @@
 package com.vinicius.backend.entities;
 
 import com.vinicius.backend.enums.ProjectCategory;
+import com.vinicius.backend.enums.SkillCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,7 +26,7 @@ public class Project {
     private String githubUrl;
     private String liveUrl;
     @Enumerated(EnumType.STRING) // Define que o campo "category" será armazenado como uma string no banco de dados.
-    private ProjectCategory category; // Enum que representa as categorias do projeto, como WEB, MOBILE, DESKTOP, etc.
+    private SkillCategory category; // Enum que representa as categorias do projeto, como WEB, MOBILE, DESKTOP, etc.
 
     @ManyToMany
     @JoinTable(

@@ -21,7 +21,7 @@ public class Skill {
     private Long id;
     private String name;
     @Enumerated(EnumType.STRING)
-    private SkillCategory category; // Backend, Frontend, Ferramentas...
+    private SkillCategory category;
 
     @Override
     public boolean equals(Object o) {
