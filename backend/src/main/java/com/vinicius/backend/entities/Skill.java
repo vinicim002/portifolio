@@ -20,6 +20,8 @@ public class Skill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(columnDefinition = "TEXT")
+    private String imgUrl;
     @Enumerated(EnumType.STRING)
     private SkillCategory category;
 
