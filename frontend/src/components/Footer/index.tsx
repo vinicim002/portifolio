@@ -10,7 +10,9 @@ export function Footer() {
             <img src='' alt='' />
             <p className='text-xl font-bold text-[#f8fafc]'>Vinicius</p>
           </div>
-          <p className='text-text-dim text-base font-semibold'>Crafting premium digital experiences with precision and speed.</p>
+          <p className='text-text-dim text-base font-semibold'>
+            Crafting premium digital experiences with precision and speed.
+          </p>
         </div>
 
         <div className='redesSociais'>
@@ -20,7 +22,9 @@ export function Footer() {
         </div>
 
         <div className='copy'>
-          <p className='text-base text-[#f8fafc] font-normal'>@ year Vinicius Vila Nova. Todos direitos reservados.</p>
+          <p className='text-base text-[#f8fafc] font-normal'>
+            @ year Vinicius Vila Nova. Todos direitos reservados.
+          </p>
         </div>
       </div>
     </>

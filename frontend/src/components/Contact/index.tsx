@@ -1,34 +1,44 @@
-import { Mail } from 'lucide-react';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import type { Message } from '../../models/MessageModel';
 import { sendMessage } from '../../services/messageService';
+import { ContactInfo } from '../ContactInfo';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faSquareLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+
+const contactSchema = z.object({
+  name: z.string().min(2, 'O nome deve conter pelo menos 2 caracteres'),
+  email: z.string().email('Email inválido'),
+  subject: z.string().min(5, 'O assunto deve conter pelo menos 5 caracteres'),
+  body: z.string().min(10, 'A mensagem deve conter pelo menos 10 caracteres'),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
 
 export function Contact() {
-  const [formData, setFormData] = useState<Message>({
-    name: '',
-    email: '',
-    subject: '',
-    body: '',
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
   });
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function onSubmit(data: ContactFormData) {
     setLoading(true);
-    setError('teste');
+    setError('');
     try {
-      await sendMessage(formData);
+      await sendMessage(data);
       setSuccess(true);
-      setFormData({ name: '', email: '', subject: '', body: '' });
+      reset();
     } catch {
       setError('Erro ao enviar mensagem. Tente novamente.');
     } finally {
@@ -45,46 +55,31 @@ export function Contact() {
             Interessado em escalar sua próxima ideia?
           </p>
           <div className='contactInfo flex flex-col gap-8'>
-            <div className='flex items-center gap-4'>
-              <div className='contactIcon glass p-4 border-border-glass rounded-xl'>
-                <Mail />
-              </div>
-              <div className='contactInfoDescription flex flex-col gap-2'>
-                <h3 className='text-text-dim font-semibold text-xs'>Email</h3>
-                <p className='font-bold text-base'>teste@gmail.com</p>
-              </div>
-            </div>
-
-            <div className='flex items-center gap-4'>
-              <div className='contactIcon glass p-4 border-border-glass rounded-xl'>
-                <Mail />
-              </div>
-              <div className='contactInfoDescription flex flex-col gap-2'>
-                <h3 className='text-text-dim font-semibold text-xs'>
-                  LinkedIn
-                </h3>
-                <p className='font-bold text-base'>
-                  linkedin.com/in/devportfolio
-                </p>
-              </div>
-            </div>
-
-            <div className='flex items-center gap-4'>
-              <div className='contactIcon glass p-4 border-border-glass rounded-xl'>
-                <Mail />
-              </div>
-              <div className='contactInfoDescription flex flex-col gap-2'>
-                <h3 className='text-text-dim font-semibold text-xs'>GitHub</h3>
-                <p className='font-bold text-base'>github.com/devportfolio</p>
-              </div>
-            </div>
+            <ContactInfo
+              title={'Email'}
+              description={'viniciusvilanova7@gmail.com'}
+              icon={<FontAwesomeIcon icon={faEnvelope} className='text-3xl' />}
+            />
+            <ContactInfo
+              title={'Github'}
+              description={'github.com/vinicim002'}
+              icon={<FontAwesomeIcon icon={faGithub} className='text-3xl' />}
+            />
+            <ContactInfo
+              title={'Linkedin'}
+              description={'linkedin.com/in/viniciusvila'}
+              icon={
+                <FontAwesomeIcon icon={faSquareLinkedin} className='text-3xl' />
+              }
+            />
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className='contactForm flex flex-col gap-8 glass p-8 rounded-xl border-border-glass'>
-          <div
-            className='contactFormInfoPesoal flex flex-row gap-8'
-          >
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className='contactForm flex flex-col gap-8 glass p-8 rounded-xl border-border-glass'
+        >
+          <div className='contactFormInfoPesoal flex flex-row gap-8'>
             <label
               htmlFor='name'
               className='flex flex-col gap-2 text-text-dim text-xs'
@@ -92,14 +87,16 @@ export function Contact() {
               Nome Completo
               <input
                 type='text'
-                name='name'
-                value={formData.name}
-                onChange={handleChange}
                 id='name'
                 placeholder='Seu nome'
-                required
                 className='p-2 glass border-border-glass rounded-xl text-base'
+                {...register('name')}
               />
+              {errors.name && (
+                <span className='text-red-400 text-xs'>
+                  {errors.name.message}
+                </span>
+              )}
             </label>
 
             <label
@@ -109,14 +106,16 @@ export function Contact() {
               Email
               <input
                 type='text'
-                name='email'
-                value={formData.email}
-                onChange={handleChange}
                 id='email'
                 placeholder='seu@gmail.com'
-                required
                 className='p-2 glass border-border-glass rounded-xl text-base'
+                {...register('email')}
               />
+              {errors.email && (
+                <span className='text-red-400 text-xs'>
+                  {errors.email.message}
+                </span>
+              )}
             </label>
           </div>
 
@@ -127,14 +126,16 @@ export function Contact() {
             Assunto
             <input
               type='text'
-              name='subject'
-              value={formData.subject}
-              onChange={handleChange}
               id='subject'
-              required
               placeholder='Assunto da mensagem'
               className='p-2 glass border-border-glass rounded-xl text-base'
+              {...register('subject')}
             />
+            {errors.subject && (
+              <span className='text-red-400 text-xs'>
+                {errors.subject.message}
+              </span>
+            )}
           </label>
 
           <label
@@ -143,16 +144,18 @@ export function Contact() {
           >
             Mensagem
             <textarea
-              name='body'
               id='body'
-              value={formData.body}
-              onChange={handleChange}
               cols={30}
               rows={10}
               placeholder='Escreva sua mensagem aqui'
-              required
               className='p-2 glass border-border-glass rounded-xl text-base'
+              {...register('body')}
             ></textarea>
+            {errors.body && (
+              <span className='text-red-400 text-xs'>
+                {errors.body.message}
+              </span>
+            )}
           </label>
 
           {success && (

@@ -3,21 +3,21 @@ export function Navbar() {
     <>
       <nav className='navbarContainer fixed top-4 left-56 right-56 z-50 flex flex-row items-center justify-between px-8 py-3 glass text-white h-16 rounded-3xl border-border-glass'>
         <div className='logoNavbar font-extrabold uppercase text-2xl'>
-          &lt;Vinicius_portfólio&gt;
+          <a href='#home'>&lt;Vinicius_portfólio&gt;</a>
         </div>
         <div className='menuContainer flex flex-row items-center justify-between gap-5'>
           <ul className='menuContent flex flex-row items-center justify-between gap-5'>
             <li className='text-text-dim uppercase text-xs'>
-              <a href='#'>Sobre</a>
+              <a href='#about'>Sobre</a>
             </li>
             <li className='text-text-dim uppercase text-xs'>
-              <a href='#'>Skills</a>
+              <a href='#technologies'>Skills</a>
             </li>
             <li className='text-text-dim uppercase text-xs'>
-              <a href='#'>Projetos</a>
+              <a href='#projects'>Projetos</a>
             </li>
             <li className='text-text-dim uppercase text-xs'>
-              <a href='#'>Contato</a>
+              <a href='#contact'>Contato</a>
             </li>
           </ul>
 
