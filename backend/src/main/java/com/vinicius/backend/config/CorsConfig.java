@@ -12,9 +12,9 @@ public class CorsConfig implements WebMvcConfigurer {
         registry
                 .addMapping("/**")  // Permitir em todos os endpoints
                 .allowedOrigins(
-                        "http://localhost:5173",      // React (desenvolvimento)
-                        "http://localhost:3001"       // React (outra porta, se usar)
-                        // "https://seusite.com"      // Descomente em produção
+                        "http://localhost:5173",
+                        "http://localhost:3001",
+                        "https://portfolio-delta-nine-4cy39n6bp5.vercel.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
