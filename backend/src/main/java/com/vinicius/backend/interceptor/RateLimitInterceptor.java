@@ -27,7 +27,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
                         // Refill.intervally(5, Duration.ofHours(1)) → a cada 1 hora
                         // o balde é reabastecido com 5 tokens de uma vez
                         // Na prática: cada IP pode enviar no máximo 5 mensagens por hora
-                        Bandwidth.classic(5, Refill.intervally(5, Duration.ofHours(24)))
+                        Bandwidth.classic(1, Refill.intervally(1, Duration.ofHours(24)))
                 )
                 .build();
     }
