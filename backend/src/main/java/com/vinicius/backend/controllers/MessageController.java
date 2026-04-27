@@ -46,22 +46,13 @@ public class MessageController {
         try {
             log.info("Requisição POST /messages recebida de: {}", message.getEmail());
 
-            // LOG TEMPORÁRIO - remover depois
-            log.info("=== HEADERS ===");
-            java.util.Collections.list(request.getHeaderNames())
-                    .forEach(header -> log.info("{}: {}", header, request.getHeader(header)));
-            log.info("RemoteAddr: {}", request.getRemoteAddr());
-            log.info("=== FIM HEADERS ===");
-
-            String ip = request.getHeader("X-Forwarded-For");
+            // X-Real-Ip é o header correto no Railway
+            String ip = request.getHeader("X-Real-Ip");
             if (ip == null || ip.isEmpty()) {
                 ip = request.getRemoteAddr();
             }
-            if (ip.contains(",")) {
-                ip = ip.split(",")[0].trim();
-            }
 
-            if (!rateLimitService.isAllowed(ip, message.getEmail())) {
+            if (!rateLimitService.isAllowed(ip)) {
                 return ResponseEntity
                         .status(HttpStatus.TOO_MANY_REQUESTS)
                         .body("Você já enviou uma mensagem recentemente. Tente novamente em 24 horas.");

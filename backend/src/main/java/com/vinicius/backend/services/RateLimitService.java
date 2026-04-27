@@ -16,14 +16,12 @@ public class RateLimitService {
 
     private Bucket createBucket() {
         return Bucket.builder()
-                .addLimit(Bandwidth.classic(2, Refill.intervally(2, Duration.ofHours(24))))
+                .addLimit(Bandwidth.classic(1, Refill.intervally(1, Duration.ofHours(24))))
                 .build();
     }
 
-    public boolean isAllowed(String ip, String email) {
-        // Chave composta IP + email — precisa mudar os dois para burlar
-        String key = ip + ":" + email.toLowerCase().trim();
-        Bucket bucket = buckets.computeIfAbsent(key, k -> createBucket());
+    public boolean isAllowed(String ip) {
+        Bucket bucket = buckets.computeIfAbsent(ip, k -> createBucket());
         return bucket.tryConsume(1);
     }
 }
