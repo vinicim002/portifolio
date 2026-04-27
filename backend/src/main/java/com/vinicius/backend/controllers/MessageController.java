@@ -46,6 +46,13 @@ public class MessageController {
         try {
             log.info("Requisição POST /messages recebida de: {}", message.getEmail());
 
+            // LOG TEMPORÁRIO - remover depois
+            log.info("=== HEADERS ===");
+            java.util.Collections.list(request.getHeaderNames())
+                    .forEach(header -> log.info("{}: {}", header, request.getHeader(header)));
+            log.info("RemoteAddr: {}", request.getRemoteAddr());
+            log.info("=== FIM HEADERS ===");
+
             String ip = request.getHeader("X-Forwarded-For");
             if (ip == null || ip.isEmpty()) {
                 ip = request.getRemoteAddr();
